@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CreditCard, Truck, ShieldCheck } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { getDb } from '../data/mockDb';
@@ -18,6 +18,12 @@ export default function Checkout() {
   });
   const { cart, cartTotal, clearCart } = useCart();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem('zeraf_auth')) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   const subtotal = cartTotal;
   const shipping = cart.length > 0 ? 15.00 : 0;
@@ -132,14 +138,14 @@ export default function Checkout() {
           <div style={{ width: '60px', height: '2px', background: '#A07855', margin: '2.5rem auto 0' }}></div>
         </div>
         
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '4rem', alignItems: 'start' }}>
+        <div className="grid-checkout">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
             {/* Shipping Info */}
             <div className="glass-premium animated-panel-1" style={{ borderRadius: '16px', background: 'rgba(255, 255, 255, 0.7)', padding: '3rem' }}>
               <h3 style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '1rem', fontFamily: '"Playfair Display", serif' }}>
                 <Truck size={28} color="#A07855" strokeWidth={1.5} /> Shipping Directory
               </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
+              <div className="grid-responsive-2" style={{ marginBottom: '2rem' }}>
                 <div className="flex flex-col gap-1">
                   <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#A07855', textTransform: 'uppercase', letterSpacing: '0.1em' }}>First Name</label>
                   <input value={formData.firstName} onChange={e => setFormData({ ...formData, firstName: e.target.value })} type="text" className="input-premium" placeholder="John" />
@@ -157,7 +163,7 @@ export default function Checkout() {
                 <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#A07855', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Street Address</label>
                 <input value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} type="text" className="input-premium" placeholder="123 Fashion Way" />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem' }}>
+              <div className="grid-responsive-3">
                 <div className="flex flex-col gap-1">
                   <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#A07855', textTransform: 'uppercase', letterSpacing: '0.1em' }}>City</label>
                   <input value={formData.city} onChange={e => setFormData({ ...formData, city: e.target.value })} type="text" className="input-premium" placeholder="Addis Ababa" />
@@ -224,7 +230,7 @@ export default function Checkout() {
               {method === 'cbe' && (
                 <div className="animate-fade-in flex flex-col items-center justify-center p-6 border border-solid border-purple-200 rounded-md bg-purple-50 text-center">
                   <p style={{ color: '#6E3C8A', fontSize: '1rem', fontWeight: 700, marginBottom: '0.5rem' }}>Commercial Bank of Ethiopia</p>
-                  <p style={{ color: '#555', fontSize: '0.9rem' }}>Please transfer <strong>${total.toFixed(2)}</strong> to account <strong>1000123456789</strong>.</p>
+                  <p style={{ color: '#555', fontSize: '0.9rem' }}>Please transfer <strong>ETB {total.toFixed(2)}</strong> to account <strong>1000123456789</strong>.</p>
                   <p style={{ color: '#555', fontSize: '0.8rem', marginTop: '0.5rem' }}>Use your order code as the payment reference. We will process your order once verified.</p>
                 </div>
               )}
@@ -235,7 +241,7 @@ export default function Checkout() {
                     <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#A07855', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Card Number</label>
                     <input type="text" className="input-premium" placeholder="0000 0000 0000 0000" />
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                  <div className="grid-responsive-2">
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#A07855', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Expiration Date</label>
                       <input type="text" className="input-premium" placeholder="MM/YY" />
@@ -273,7 +279,7 @@ export default function Checkout() {
                       </div>
                       <div>
                         <h4 style={{ fontSize: '0.95rem', fontWeight: 500, lineHeight: '1.3' }}>{item.name}</h4>
-                        <p style={{ color: '#A07855', fontWeight: 700, marginTop: '0.4rem', fontSize: '1.1rem' }}>${item.price.toFixed(2)}</p>
+                        <p style={{ color: '#A07855', fontWeight: 700, marginTop: '0.4rem', fontSize: '1.1rem' }}>ETB {item.price.toFixed(2)}</p>
                       </div>
                     </div>
                   ))
@@ -283,20 +289,20 @@ export default function Checkout() {
               <div className="flex flex-col gap-4 mb-8 pt-4">
                 <div className="flex justify-between" style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>
                   <span>Subtotal</span>
-                  <span style={{ fontWeight: 500 }}>${subtotal.toFixed(2)}</span>
+                  <span style={{ fontWeight: 500 }}>ETB {subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between" style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>
                   <span>Shipping</span>
-                  <span style={{ fontWeight: 500 }}>${shipping.toFixed(2)}</span>
+                  <span style={{ fontWeight: 500 }}>ETB {shipping.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between" style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>
                   <span>Tax</span>
-                  <span style={{ fontWeight: 500 }}>${tax.toFixed(2)}</span>
+                  <span style={{ fontWeight: 500 }}>ETB {tax.toFixed(2)}</span>
                 </div>
                 <div style={{ height: '1px', background: 'rgba(160,120,85,0.3)', margin: '1.5rem 0' }}></div>
                 <div className="flex justify-between items-center" style={{ fontSize: '1.6rem', fontWeight: 700 }}>
                   <span>Total</span>
-                  <span style={{ color: '#A07855' }}>${total.toFixed(2)}</span>
+                  <span style={{ color: '#A07855' }}>ETB {total.toFixed(2)}</span>
                 </div>
               </div>
 

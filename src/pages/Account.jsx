@@ -24,10 +24,10 @@ export default function Account() {
   ], []);
   
   return (
-    <div className="container py-12 animate-fade-in">
+    <div className="container py-20 animate-fade-in relative z-10" style={{ maxWidth: '1100px' }}>
       <h1 className="heading-section mb-8">My <span className="gradient-text">Account</span></h1>
       
-      <div style={{ display: 'grid', gridTemplateColumns: '250px 1fr', gap: '4rem' }}>
+      <div className="grid-account">
         {/* Sidebar Nav */}
         <aside className="glass-panel p-6" style={{ height: 'fit-content', position: 'sticky', top: '100px' }}>
           <div className="flex items-center gap-4 mb-8 pb-8" style={{ borderBottom: '1px solid var(--surface-border)' }}>

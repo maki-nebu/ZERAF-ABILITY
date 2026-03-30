@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, User } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { getDb } from '../data/mockDb';
 
@@ -33,6 +33,9 @@ export default function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-6">
+            <Link to="/login" style={{ color: '#333' }}>
+              <User size={22} />
+            </Link>
             <Link to="/cart" style={{ color: '#333', position: 'relative' }}>
               <ShoppingCart size={22} />
               {cartCount > 0 && (

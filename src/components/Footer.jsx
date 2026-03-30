@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
+import { getDb } from '../data/mockDb';
 
 export default function Footer() {
+  const db = getDb();
+  const social = db.socialLinks || {};
+
   return (
     <footer className="glass-panel mt-12" style={{ borderRadius: '0', borderBottom: 'none', borderLeft: 'none', borderRight: 'none' }}>
       <div className="container py-12">
@@ -12,10 +16,10 @@ export default function Footer() {
               Inclusive adaptive fashion celebrating Ethiopian heritage and the strength of persons with disabilities.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="btn-icon" style={{ background: '#A07855', color: '#fff' }}><Facebook size={18} /></a>
-              <a href="#" className="btn-icon" style={{ background: '#A07855', color: '#fff' }}><Twitter size={18} /></a>
-              <a href="https://www.instagram.com/zeraf_ability/" target="_blank" rel="noopener noreferrer" className="btn-icon" style={{ background: '#A07855', color: '#fff' }}><Instagram size={18} /></a>
-              <a href="#" className="btn-icon" style={{ background: '#A07855', color: '#fff' }}><Youtube size={18} /></a>
+              <a href={social.facebook || '#'} target={social.facebook ? '_blank' : undefined} rel="noopener noreferrer" className="btn-icon" style={{ background: '#A07855', color: '#fff' }}><Facebook size={18} /></a>
+              <a href={social.twitter || '#'} target={social.twitter ? '_blank' : undefined} rel="noopener noreferrer" className="btn-icon" style={{ background: '#A07855', color: '#fff' }}><Twitter size={18} /></a>
+              <a href={social.instagram || '#'} target={social.instagram ? '_blank' : undefined} rel="noopener noreferrer" className="btn-icon" style={{ background: '#A07855', color: '#fff' }}><Instagram size={18} /></a>
+              <a href={social.youtube || '#'} target={social.youtube ? '_blank' : undefined} rel="noopener noreferrer" className="btn-icon" style={{ background: '#A07855', color: '#fff' }}><Youtube size={18} /></a>
             </div>
           </div>
           <div>

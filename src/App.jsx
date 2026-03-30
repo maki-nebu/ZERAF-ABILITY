@@ -13,6 +13,7 @@ import About from './pages/About';
 import Portfolio from './pages/Portfolio';
 import Collections from './pages/Collections';
 import Contact from './pages/Contact';
+import Login from './pages/Login';
 import { AdminAuthProvider } from './context/AdminAuthContext';
 
 function AppContent() {
@@ -43,6 +44,7 @@ function AppContent() {
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/collections" element={<Collections />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
       <Footer />

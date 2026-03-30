@@ -66,8 +66,8 @@ export default function Cart() {
             <div className="flex flex-col gap-8">
               {cart.map((item, idx) => (
                 <div key={item.id} className="reveal-3d" style={{ transitionDelay: `${idx * 0.1}s` }}>
-                   <div className="glass-premium" style={{ display: 'flex', gap: '2rem', padding: '2rem', borderRadius: '12px', border: 'none', background: 'rgba(255,255,255,0.6)' }}>
-                      <div className="perspective-container" style={{ width: '100px', height: '130px', flexShrink: 0 }}>
+                   <div className="glass-premium item-row" style={{ border: 'none' }}>
+                      <div className="perspective-container item-img-container" style={{ width: '100px', height: '130px', flexShrink: 0 }}>
                          <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} />
                       </div>
                       
@@ -82,7 +82,7 @@ export default function Cart() {
                                   <Trash2 size={18} />
                                 </button>
                             </div>
-                            <div style={{ fontSize: '1.2rem', fontWeight: 600, color: '#2D2621' }}>${item.price.toFixed(2)}</div>
+                            <div style={{ fontSize: '1.2rem', fontWeight: 600, color: '#2D2621' }}>ETB {item.price.toFixed(2)}</div>
                          </div>
 
                          <div className="flex items-center gap-6 mt-6">
@@ -91,7 +91,7 @@ export default function Cart() {
                                <span style={{ fontWeight: 700, minWidth: '20px', textAlign: 'center' }}>{item.quantity}</span>
                                <button onClick={() => updateQuantity(item.id, 1)} style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}><Plus size={14} /></button>
                             </div>
-                            <div style={{ fontWeight: 700, fontSize: '1.1rem', marginLeft: 'auto', color: '#A07855' }}>${(item.price * item.quantity).toFixed(2)}</div>
+                            <div style={{ fontWeight: 700, fontSize: '1.1rem', marginLeft: 'auto', color: '#A07855' }}>ETB {(item.price * item.quantity).toFixed(2)}</div>
                          </div>
                       </div>
                    </div>
@@ -107,20 +107,20 @@ export default function Cart() {
                   <div className="flex flex-col gap-4 mb-8 pt-4">
                      <div className="flex justify-between" style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>
                         <span>Subtotal</span>
-                        <span style={{ fontWeight: 500 }}>${cartTotal.toFixed(2)}</span>
+                        <span style={{ fontWeight: 500 }}>ETB {cartTotal.toFixed(2)}</span>
                      </div>
                      <div className="flex justify-between" style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>
                         <span>Shipping</span>
-                        <span style={{ fontWeight: 500 }}>${shipping.toFixed(2)}</span>
+                        <span style={{ fontWeight: 500 }}>ETB {shipping.toFixed(2)}</span>
                      </div>
                      <div className="flex justify-between" style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>
                         <span>Tax</span>
-                        <span style={{ fontWeight: 500 }}>${tax.toFixed(2)}</span>
+                        <span style={{ fontWeight: 500 }}>ETB {tax.toFixed(2)}</span>
                      </div>
                      <div style={{ height: '1px', background: 'rgba(160,120,85,0.3)', margin: '1.5rem 0' }}></div>
                      <div className="flex justify-between items-center" style={{ fontSize: '1.6rem', fontWeight: 700 }}>
                         <span>Total</span>
-                        <span style={{ color: '#A07855' }}>${total.toFixed(2)}</span>
+                        <span style={{ color: '#A07855' }}>ETB {total.toFixed(2)}</span>
                      </div>
                   </div>
 

@@ -137,6 +137,23 @@ export default function Admin() {
   const [s2Image, setS2Image] = useState(db.homeContent?.heroSlides?.[1]?.image || MOCK_DB.homeContent.heroSlides[1].image);
   const [logoImage, setLogoImage] = useState(db.siteLogo || MOCK_DB.siteLogo);
 
+  // Social links
+  const [socialLinks, setSocialLinks] = useState(db.socialLinks || MOCK_DB.socialLinks || { facebook: '', twitter: '', instagram: '', youtube: '', tiktok: '' });
+  const [storeSettings, setStoreSettings] = useState(db.storeSettings || MOCK_DB.storeSettings || { storeName: 'Zeraf Ability', currency: 'ETB', taxRate: 15, maintenanceMode: false, lowStockThreshold: 10 });
+  const [contactInfo, setContactInfo] = useState(db.contactInfo || MOCK_DB.contactInfo || { email: '', phone: '', address: '', workingHours: '' });
+
+  const saveGlobalSettings = () => {
+    const saved = { 
+      ...getDb(), 
+      socialLinks, 
+      storeSettings, 
+      contactInfo,
+      siteLogo: logoImage
+    };
+    localStorage.setItem('zeraf_mock_db', JSON.stringify(saved));
+    alert('✓ Global settings updated successfully.');
+  };
+
   const handleImageUpload = (e, setter) => {
     const file = e.target.files[0];
     if (file) {
@@ -162,6 +179,7 @@ export default function Admin() {
         width: '260px', minWidth: '260px', background: '#1E1A17',
         display: 'flex', flexDirection: 'column', padding: '0',
         boxShadow: '4px 0 24px rgba(0,0,0,0.15)',
+        position: 'fixed', top: 0, left: 0, height: '100vh', zIndex: 50,
       }}>
         {/* Brand */}
         <div style={{ padding: '2rem 1.5rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
@@ -209,7 +227,7 @@ export default function Admin() {
       </aside>
 
       {/* ── MAIN AREA ── */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#f8f6f3', overflow: 'hidden' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#f8f6f3', overflow: 'hidden', marginLeft: '260px' }}>
 
         {/* Top Bar */}
         <header style={{ background: 'white', borderBottom: '1px solid #ede9e4', padding: '0 2rem', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
@@ -275,7 +293,7 @@ export default function Admin() {
                         <td style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', fontWeight: 700, color: '#A07855' }}>{order.id}</td>
                         <td style={{ padding: '1rem 1.5rem', fontSize: '0.85rem', color: '#333' }}>{order.customer}</td>
                         <td style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#666' }}>{order.product}</td>
-                        <td style={{ padding: '1rem 1.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#2D2621' }}>${order.amount.toFixed(2)}</td>
+                        <td style={{ padding: '1rem 1.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#2D2621' }}>ETB {order.amount.toFixed(2)}</td>
                         <td style={{ padding: '1rem 1.5rem' }}>
                           <span style={{ padding: '0.25rem 0.75rem', borderRadius: '20px', fontSize: '0.7rem', fontWeight: 700, background: order.status === 'Delivered' ? '#dcfce7' : order.status === 'Shipped' ? '#dbeafe' : '#fef9c3', color: order.status === 'Delivered' ? '#16a34a' : order.status === 'Shipped' ? '#2563eb' : '#854d0e' }}>
                             {order.status}
@@ -492,7 +510,7 @@ export default function Admin() {
                   <p style={{ fontSize: '0.7rem', fontWeight: 700, color: '#A07855', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.4rem' }}>Retail Operations</p>
                   <h1 style={{ fontSize: '2rem', fontFamily: '"Playfair Display", serif', color: '#2D2621', margin: 0 }}>Product <span style={{ color: '#A07855', fontStyle: 'italic' }}>Inventory</span></h1>
                 </div>
-                <button onClick={() => { setShowAddProduct(!showAddProduct); setEditingProduct(null); setProductForm({ name: '', category: '', price: 0, stock: 0, status: 'In Stock', image: '' }); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#A07855', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '8px', fontWeight: 700, fontSize: '0.85rem', border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(160,120,85,0.3)' }}>
+                <button onClick={() => { setShowAddProduct(!showAddProduct); setEditingProduct(null); setProductForm({ name: '', category: '', price: 0, stock: 0, status: 'In Stock', image: '', sizes: [] }); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#A07855', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '8px', fontWeight: 700, fontSize: '0.85rem', border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(160,120,85,0.3)' }}>
                   <Plus size={16} /> Add Product
                 </button>
               </div>
@@ -525,7 +543,7 @@ export default function Admin() {
                         <input value={productForm.category} onChange={e => setProductForm({ ...productForm, category: e.target.value })} placeholder="e.g. ADAPTIVE, OUTERWEAR" style={{ width: '100%', padding: '0.75rem', border: '1px solid #e2e2e2', borderRadius: '6px', fontSize: '0.9rem', outline: 'none' }} />
                       </div>
                       <div>
-                        <label style={{ fontSize: '0.65rem', fontWeight: 800, color: '#A07855', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>Price ($)</label>
+                        <label style={{ fontSize: '0.65rem', fontWeight: 800, color: '#A07855', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>Price (ETB)</label>
                         <input type="number" step="0.01" value={productForm.price} onChange={e => setProductForm({ ...productForm, price: parseFloat(e.target.value) || 0 })} style={{ width: '100%', padding: '0.75rem', border: '1px solid #e2e2e2', borderRadius: '6px', fontSize: '0.9rem', outline: 'none' }} />
                       </div>
                       <div>
@@ -540,6 +558,20 @@ export default function Admin() {
                           <option value="Boutique Exclusive">Boutique Exclusive</option>
                           <option value="Coming Soon">Coming Soon</option>
                         </select>
+                      </div>
+                      <div style={{ gridColumn: 'span 2' }}>
+                        <label style={{ fontSize: '0.65rem', fontWeight: 800, color: '#A07855', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>Sizes (check all that apply)</label>
+                        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', padding: '0.5rem 0' }}>
+                          {['XS','S','M','L','XL','XXL'].map(sz => (
+                            <label key={sz} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer', fontSize: '0.85rem', color: '#555' }}>
+                              <input type="checkbox" checked={(productForm.sizes || []).includes(sz)} onChange={() => {
+                                const cur = productForm.sizes || [];
+                                setProductForm({ ...productForm, sizes: cur.includes(sz) ? cur.filter(s => s !== sz) : [...cur, sz] });
+                              }} style={{ accentColor: '#A07855', width: '16px', height: '16px' }} />
+                              {sz}
+                            </label>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -565,9 +597,9 @@ export default function Admin() {
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead>
                     <tr style={{ background: '#fcfaf8' }}>
-                      {['Image', 'Product Name', 'Category', 'Price', 'Stock', 'Status', 'Actions'].map(h => (
+                      {['Image', 'Product Name', 'Category', 'Price', 'Sizes', 'Stock', 'Status', 'Actions'].map(h => (
                         <th key={h} style={{ padding: '1rem 1.5rem', textAlign: 'left', fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', borderBottom: '1px solid #ede9e4' }}>{h}</th>
-                      ))}
+                      ))}  
                     </tr>
                   </thead>
                   <tbody>
@@ -580,7 +612,8 @@ export default function Admin() {
                         </td>
                         <td style={{ padding: '1rem 1.5rem', fontWeight: 700, fontSize: '0.85rem', color: '#2D2621' }}>{p.name}</td>
                         <td style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', color: '#A07855', fontWeight: 700 }}>{p.category}</td>
-                        <td style={{ padding: '1rem 1.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#2D2621' }}>${p.price.toFixed(2)}</td>
+                        <td style={{ padding: '1rem 1.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#2D2621' }}>ETB {p.price.toFixed(2)}</td>
+                        <td style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', color: '#666' }}>{(p.sizes || []).join(', ') || '—'}</td>
                         <td style={{ padding: '1rem 1.5rem', fontSize: '0.85rem', color: '#666', fontWeight: 600 }}>{p.stock}</td>
                         <td style={{ padding: '1rem 1.5rem' }}>
                           <span style={{ padding: '0.2rem 0.6rem', borderRadius: '20px', fontSize: '0.65rem', fontWeight: 700, background: p.status === 'In Stock' ? '#dcfce7' : p.status === 'Low Stock' ? '#fef9c3' : '#dbeafe', color: p.status === 'In Stock' ? '#16a34a' : p.status === 'Low Stock' ? '#854d0e' : '#1d4ed8' }}>{p.status}</span>
@@ -928,7 +961,7 @@ export default function Admin() {
                       <input type="number" value={customerForm.orders} onChange={e => setCustomerForm({ ...customerForm, orders: parseInt(e.target.value) || 0 })} style={{ width: '100%', padding: '0.75rem', border: '1px solid #e2e2e2', borderRadius: '6px', fontSize: '0.9rem', outline: 'none' }} />
                     </div>
                     <div>
-                      <label style={{ fontSize: '0.65rem', fontWeight: 800, color: '#A07855', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>Total Spent ($)</label>
+                      <label style={{ fontSize: '0.65rem', fontWeight: 800, color: '#A07855', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>Total Spent (ETB)</label>
                       <input type="number" step="0.01" value={customerForm.totalSpent} onChange={e => setCustomerForm({ ...customerForm, totalSpent: parseFloat(e.target.value) || 0 })} style={{ width: '100%', padding: '0.75rem', border: '1px solid #e2e2e2', borderRadius: '6px', fontSize: '0.9rem', outline: 'none' }} />
                     </div>
                   </div>
@@ -993,12 +1026,104 @@ export default function Admin() {
 
           {/* ── SETTINGS ── */}
           {activeTab === 'settings' && (
-            <div style={{ maxWidth: '700px', margin: '5rem auto', textAlign: 'center' }}>
-              <div style={{ width: '60px', height: '60px', background: 'rgba(160,120,85,0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: '#A07855' }}>
-                <Settings size={28} />
+            <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+              <div style={{ marginBottom: '2.5rem' }}>
+                <p style={{ fontSize: '0.7rem', fontWeight: 700, color: '#A07855', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.4rem' }}>Global Configuration</p>
+                <h1 style={{ fontSize: '2rem', fontFamily: '"Playfair Display", serif', color: '#2D2621', margin: 0 }}>Portal <span style={{ color: '#A07855', fontStyle: 'italic' }}>Settings</span></h1>
               </div>
-              <h2 style={{ fontSize: '1.5rem', fontFamily: '"Playfair Display", serif', color: '#2D2621', marginBottom: '0.75rem' }}>Settings Module</h2>
-              <p style={{ color: '#999', fontSize: '0.9rem' }}>This module is currently under construction and will be available soon.</p>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '2.5rem' }}>
+                {/* Left: Navigation */}
+                <div style={{ position: 'sticky', top: '2rem', height: 'fit-content' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    {['Store Identification', 'Contact Information', 'Social Connectivity', 'Operations & Legal'].map((item, idx) => (
+                      <a key={idx} href={`#settings-${idx}`} style={{ padding: '0.75rem 1.25rem', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600, color: idx === 0 ? '#A07855' : '#666', background: idx === 0 ? 'rgba(160,120,85,0.08)' : 'transparent', textDecoration: 'none', transition: 'all 0.2s' }}>
+                        {item}
+                      </a>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: '2.5rem', padding: '1.5rem', background: '#2D2621', borderRadius: '12px', color: 'white' }}>
+                    <p style={{ fontSize: '0.65rem', fontWeight: 800, color: '#A07855', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Security</p>
+                    <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)', lineHeight: '1.6', marginBottom: '1rem' }}>Your session is protected with 256-bit encryption. All changes are logged.</p>
+                    <button style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'white', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>Generate Audit Log</button>
+                  </div>
+                </div>
+
+                {/* Right: Forms */}
+                <div style={{ display: 'grid', gap: '1.5rem' }}>
+                  {/* Store Identification */}
+                  <div id="settings-0" style={{ background: 'white', borderRadius: '12px', border: '1px solid #ede9e4', padding: '2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                    <h3 style={{ margin: '0 0 1.5rem', fontSize: '0.95rem', fontWeight: 700, color: '#2D2621', paddingBottom: '1rem', borderBottom: '1px solid #f5f2ef' }}>Store Identification</h3>
+                    <div style={{ display: 'grid', gap: '1.25rem' }}>
+                      <Field label="Store Name" value={storeSettings.storeName} onChange={val => setStoreSettings({ ...storeSettings, storeName: val })} />
+                      <div>
+                        <label style={{ fontSize: '0.6rem', fontWeight: 800, color: '#A07855', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' }}>Store Hallmark (Logo)</label>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                          <div style={{ width: '64px', height: '64px', background: '#f8f6f3', borderRadius: '8px', border: '1px solid #ede9e4', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px' }}>
+                            <img src={logoImage} alt="Logo" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                          </div>
+                          <label style={{ background: '#f8f6f3', border: '1px solid #ede9e4', padding: '0.6rem 1.25rem', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', color: '#666' }}>
+                            Upload Asset
+                            <input type="file" hidden accept="image/*" onChange={e => handleImageUpload(e, setLogoImage)} />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Contact Information */}
+                  <div id="settings-1" style={{ background: 'white', borderRadius: '12px', border: '1px solid #ede9e4', padding: '2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                    <h3 style={{ margin: '0 0 1.5rem', fontSize: '0.95rem', fontWeight: 700, color: '#2D2621', paddingBottom: '1rem', borderBottom: '1px solid #f5f2ef' }}>Contact & Support Information</h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                      <Field label="Public Support Email" value={contactInfo.email} onChange={val => setContactInfo({ ...contactInfo, email: val })} />
+                      <Field label="Support Phone Number" value={contactInfo.phone} onChange={val => setContactInfo({ ...contactInfo, phone: val })} />
+                      <div style={{ gridColumn: 'span 2' }}>
+                        <Field label="Physical Boutique Address" value={contactInfo.address} onChange={val => setContactInfo({ ...contactInfo, address: val })} textarea />
+                      </div>
+                      <div style={{ gridColumn: 'span 2' }}>
+                        <Field label="Boutique Working Hours" value={contactInfo.workingHours} onChange={val => setContactInfo({ ...contactInfo, workingHours: val })} />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Social Connectivity */}
+                  <div id="settings-2" style={{ background: 'white', borderRadius: '12px', border: '1px solid #ede9e4', padding: '2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                    <h3 style={{ margin: '0 0 1.5rem', fontSize: '0.95rem', fontWeight: 700, color: '#2D2621', paddingBottom: '1rem', borderBottom: '1px solid #f5f2ef' }}>Social Connectivity</h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                      <Field label="Facebook Page" value={socialLinks.facebook} onChange={val => setSocialLinks({ ...socialLinks, facebook: val })} />
+                      <Field label="Twitter / X Profile" value={socialLinks.twitter} onChange={val => setSocialLinks({ ...socialLinks, twitter: val })} />
+                      <Field label="Instagram Profile" value={socialLinks.instagram} onChange={val => setSocialLinks({ ...socialLinks, instagram: val })} />
+                      <Field label="YouTube Channel" value={socialLinks.youtube} onChange={val => setSocialLinks({ ...socialLinks, youtube: val })} />
+                      <Field label="TikTok Account" value={socialLinks.tiktok} onChange={val => setSocialLinks({ ...socialLinks, tiktok: val })} />
+                    </div>
+                  </div>
+
+                  {/* Operations & Legal */}
+                  <div id="settings-3" style={{ background: 'white', borderRadius: '12px', border: '1px solid #ede9e4', padding: '2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                    <h3 style={{ margin: '0 0 1.5rem', fontSize: '0.95rem', fontWeight: 700, color: '#2D2621', paddingBottom: '1rem', borderBottom: '1px solid #f5f2ef' }}>Operations & Legal</h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '1.5rem' }}>
+                      <Field label="Primary Shop Currency" value={storeSettings.currency} onChange={val => setStoreSettings({ ...storeSettings, currency: val })} />
+                      <Field label="Global Tax Rate (%)" value={storeSettings.taxRate} onChange={val => setStoreSettings({ ...storeSettings, taxRate: val })} />
+                      <Field label="Low Stock Alert Threshold" value={storeSettings.lowStockThreshold} onChange={val => setStoreSettings({ ...storeSettings, lowStockThreshold: parseInt(val) })} />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.25rem', background: storeSettings.maintenanceMode ? '#fef2f2' : '#f0fdf4', borderRadius: '8px', border: '1px solid', borderColor: storeSettings.maintenanceMode ? '#fecaca' : '#bbf7d0' }}>
+                      <div>
+                        <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: 700, color: storeSettings.maintenanceMode ? '#991b1b' : '#166534' }}>Maintenance Mode</p>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: storeSettings.maintenanceMode ? '#b91c1c' : '#15803d' }}>Disable public access to the storefront while you perform maintenance.</p>
+                      </div>
+                      <button onClick={() => setStoreSettings({ ...storeSettings, maintenanceMode: !storeSettings.maintenanceMode })} style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: 'none', background: storeSettings.maintenanceMode ? '#dc2626' : '#16a34a', color: 'white', fontWeight: 700, fontSize: '0.75rem', cursor: 'pointer' }}>
+                        {storeSettings.maintenanceMode ? 'DEACTIVATE' : 'ACTIVATE'}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end', padding: '2rem 0' }}>
+                    <button onClick={saveGlobalSettings} style={{ background: '#A07855', color: 'white', padding: '1rem 4rem', borderRadius: '8px', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '0.1em', border: 'none', cursor: 'pointer', boxShadow: '0 8px 24px rgba(160,120,85,0.3)' }}>
+                      SYCHRONIZE GLOBAL CONFIGURATION
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 

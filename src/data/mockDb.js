@@ -5,13 +5,13 @@
 
 export const MOCK_DB = {
   products: [
-    { id: 1, name: "Adaptive Magnetic-Zip Hoodie", price: 89.00, stock: 45, category: "ADAPTIVE", status: "In Stock" },
-    { id: 2, name: "Sensory-Free Seamless Tee", price: 39.00, stock: 112, category: "ADAPTIVE", status: "In Stock" },
-    { id: 3, name: "Seated-Cut Boutique Chinos", price: 75.00, stock: 18, category: "BOTTOMS", status: "Low Stock" },
-    { id: 4, name: "One-Handed Military Parka", price: 139.00, stock: 12, category: "OUTERWEAR", status: "Low Stock" },
-    { id: 5, name: "Red Flounced Runway Dress", price: 145.00, stock: 8, category: "DRESSES", status: "Boutique Exclusive" },
-    { id: 7, name: "Button-Front Designer Gown", price: 165.00, stock: 5, category: "DRESSES", status: "Low Stock" },
-    { id: 8, name: "Wide-Fit Magnetic Trainers", price: 120.00, stock: 32, category: "FOOTWEAR", status: "In Stock" }
+    { id: 1, name: "Adaptive Magnetic-Zip Hoodie", price: 89.00, stock: 45, category: "ADAPTIVE", status: "In Stock", sizes: ["S","M","L","XL"] },
+    { id: 2, name: "Sensory-Free Seamless Tee", price: 39.00, stock: 112, category: "ADAPTIVE", status: "In Stock", sizes: ["XS","S","M","L"] },
+    { id: 3, name: "Seated-Cut Boutique Chinos", price: 75.00, stock: 18, category: "BOTTOMS", status: "Low Stock", sizes: ["M","L","XL"] },
+    { id: 4, name: "One-Handed Military Parka", price: 139.00, stock: 12, category: "OUTERWEAR", status: "Low Stock", sizes: ["S","M","L"] },
+    { id: 5, name: "Red Flounced Runway Dress", price: 145.00, stock: 8, category: "DRESSES", status: "Boutique Exclusive", sizes: ["XS","S","M"] },
+    { id: 7, name: "Button-Front Designer Gown", price: 165.00, stock: 5, category: "DRESSES", status: "Low Stock", sizes: ["S","M","L"] },
+    { id: 8, name: "Wide-Fit Magnetic Trainers", price: 120.00, stock: 32, category: "FOOTWEAR", status: "In Stock", sizes: ["S","M","L","XL"] }
   ],
   
   orders: [
@@ -26,7 +26,7 @@ export const MOCK_DB = {
   ],
 
   stats: {
-    totalRevenue: "$45,280.00",
+    totalRevenue: "ETB 45,280.00",
     activeOrders: 12,
     customersTotal: 842,
     conversionRate: "4.2%"
@@ -93,7 +93,31 @@ export const MOCK_DB = {
     ctaButton: "VIEW RELEASES",
     featuredCollectionsTagline: "Our signature adaptive collections — crafted for every body, every story."
   },
-  siteLogo: "/image/Screenshot 2026-03-19 033934.png"
+
+  socialLinks: {
+    facebook: "",
+    twitter: "",
+    instagram: "https://www.instagram.com/zeraf_ability/",
+    youtube: "",
+    tiktok: ""
+  },
+
+  siteLogo: "/image/Screenshot 2026-03-19 033934.png",
+
+  storeSettings: {
+    storeName: "Zeraf Ability",
+    currency: "ETB",
+    taxRate: 15,
+    maintenanceMode: false,
+    lowStockThreshold: 10
+  },
+
+  contactInfo: {
+    email: "info@zerafability.com",
+    phone: "+251 911 234 567",
+    address: "Bole Road, Addis Ababa, Ethiopia",
+    workingHours: "Mon - Sat: 9:00 AM - 7:00 PM"
+  }
 };
 
 // Persistence functions
